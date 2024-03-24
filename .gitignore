@@ -70,7 +70,11 @@ crashlytics-build.properties
 # Temporary auto-generated Android Assets
 /[Aa]ssets/[Ss]treamingAssets/aa.meta
 <<<<<<< HEAD
+<<<<<<< HEAD
 /[Aa]ssets/[Ss]treamingAssets/aa/*
 =======
 /[Aa]ssets/[Ss]treamingAssets/aa/*
 >>>>>>> GemasanSimulation/main
+=======
+/[Aa]ssets/[Ss]treamingAssets/aa/*
+>>>>>>> Match3/main
