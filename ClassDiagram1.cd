@@ -1,0 +1,159 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="ColorExplodeFX">
+    <Position X="0.75" Y="11" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQgAA=</HashCode>
+      <FileName>Assets\Scripts\Core\ColorExplodeFX.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ColorExplodeFXPool">
+    <Position X="0.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Core\ColorExplodeFXPool.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="InputReader" BaseTypeListCollapsed="true">
+    <Position X="18.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAACCAAAAAAAAAIEAEAAAAAIAAAQIAgAAAAAAAEA=</HashCode>
+      <FileName>Assets\Scripts\Core\InputReader.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Match">
+    <Position X="20.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAACBECAAAAEQIAAAAQAAEAAAQAAAEUAABAABAA=</HashCode>
+      <FileName>Assets\Scripts\Core\Match.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Matchable">
+    <Position X="5.25" Y="11" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ABgAgARgIAAAAAAMAAAACAAAAASIACAIAAAgAAAAAGE=</HashCode>
+      <FileName>Assets\Scripts\Core\Matchable.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MatchableFX">
+    <Position X="16.75" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAQABAEAAAAAQgAAQAAABACAAAEAAAAAAIAABAAACAA=</HashCode>
+      <FileName>Assets\Scripts\Core\MatchableFX.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MatchableFXPool">
+    <Position X="3" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Core\MatchableFXPool.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MatchableVariant">
+    <Position X="18.5" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAABABAACAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Core\MatchableVariant.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ScorePointFX">
+    <Position X="3" Y="11" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQABIEAAAACAAAAAAAABBCAAAEAAAAIAAAAAAAAAEA=</HashCode>
+      <FileName>Assets\Scripts\Core\ScorePointFX.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ScorePointFXPool">
+    <Position X="5.25" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Core\ScorePointFXPool.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SoundManager">
+    <Position X="12" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAARAAAAAAAAAgAEAgAAAAAAAAAgAAAAAAAIEA=</HashCode>
+      <FileName>Assets\Scripts\Core\SoundManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Extensions">
+    <Position X="16.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEAABMAAgAmEAAAAEAAAcAAACAKAAIgAgIABAACC5AA=</HashCode>
+      <FileName>Assets\Scripts\Runtime\Extensions\Extensions.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MonoSingleton&lt;T&gt;">
+    <Position X="23.75" Y="6.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAABAABAAAAAQAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Runtime\Extensions\MonoSingleton.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Movable">
+    <Position X="3" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAQQAAAAAAgAAQAGABAAAACAAAEI=</HashCode>
+      <FileName>Assets\Scripts\Tools\Movable.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Core.GameManager">
+    <Position X="9.75" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>CAAgBAAAAIAAAgAAAMAAQAAAggEBAAAgAAAAAAAAAEA=</HashCode>
+      <FileName>Assets\Scripts\Core\GameManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Core.MatchableGrid">
+    <Position X="14.25" Y="7.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>Ji4IEAAKjCCAQEUAAQC5ECQAEgAEwBMC8AASCggBSEA=</HashCode>
+      <FileName>Assets\Scripts\Core\MatchableGrid.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Core.MatchablePool">
+    <Position X="7.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAEAAIAAQYAAIEAAAAAAAACAAAAIAAQAAI=</HashCode>
+      <FileName>Assets\Scripts\Core\MatchablePool.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Tools.GridSystem&lt;T&gt;">
+    <Position X="14.25" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AERAAAAABAAAAAIEAQAAAAIACgABCAAACIAAAAAAABI=</HashCode>
+      <FileName>Assets\Scripts\Tools\GridSystem.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Tools.ObjectPool&lt;T&gt;">
+    <Position X="3.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAAAAAAAIAAAAQAABAACAAAAAAAAAAAAEAIAAlI=</HashCode>
+      <FileName>Assets\Scripts\Tools\ObjectPool.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Tools.SingletonMonoBehaviour&lt;T&gt;" Collapsed="true">
+    <Position X="9.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAAAAAAAAAAAAAAAAAAAABIAAAAQAAAgAAAAEA=</HashCode>
+      <FileName>Assets\Scripts\Tools\SingletonMonoBehaviour.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Enum Name="MatchableColor">
+    <Position X="23" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAhAAAAAAAAAAAAAAAAAAAAAAADEAAAA=</HashCode>
+      <FileName>Assets\Scripts\Core\MatchableVariant.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="MatchableType">
+    <Position X="24.75" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAABAAAAAQAEABAAAAAAIAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Core\MatchableVariant.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
