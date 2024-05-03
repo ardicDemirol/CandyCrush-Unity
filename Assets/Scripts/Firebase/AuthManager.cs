@@ -4,14 +4,15 @@ using Firebase;
 using Firebase.Auth;
 using TMPro;
 using System.Threading.Tasks;
+using Core;
 
 public class AuthManager : MonoBehaviour
 {
     //Firebase variables
     [Header("Firebase")]
     public DependencyStatus dependencyStatus;
-    public FirebaseAuth auth;
-    public FirebaseUser User;
+    private FirebaseAuth _auth;
+    private FirebaseUser _user;
 
     //Login variables
     [Header("Login")]
@@ -50,7 +51,8 @@ public class AuthManager : MonoBehaviour
     {
         Debug.Log("Setting up Firebase Auth");
         //Set the authentication instance object
-        auth = FirebaseAuth.DefaultInstance;
+        _auth = FirebaseAuth.DefaultInstance;
+        BackendManager.Instance.Auth = _auth;
     }
 
     //Function for the login button
@@ -69,7 +71,7 @@ public class AuthManager : MonoBehaviour
     private IEnumerator Login(string _email, string _password)
     {
         //Call the Firebase auth signin function passing the email and password
-        Task<AuthResult> LoginTask = auth.SignInWithEmailAndPasswordAsync(_email, _password);
+        Task<AuthResult> LoginTask = _auth.SignInWithEmailAndPasswordAsync(_email, _password);
         //Wait until the task completes
         yield return new WaitUntil(predicate: () => LoginTask.IsCompleted);
 
@@ -105,8 +107,9 @@ public class AuthManager : MonoBehaviour
         {
             //User is now logged in
             //Now get the result
-            User = LoginTask.Result.User;
-            Debug.LogFormat("User signed in successfully: {0} ({1})", User.DisplayName, User.Email);
+            _user = LoginTask.Result.User;
+            BackendManager.Instance.User = _user;
+            Debug.LogFormat("User signed in successfully: {0} ({1})", _user.DisplayName, _user.Email);
             warningLoginText.text = "";
             confirmLoginText.text = "Logged In";
             SceneController.Instance.LoadScene(1, 0.5f);
@@ -128,7 +131,7 @@ public class AuthManager : MonoBehaviour
         else
         {
             //Call the Firebase auth signin function passing the email and password
-            Task<AuthResult> RegisterTask = auth.CreateUserWithEmailAndPasswordAsync(_email, _password);
+            Task<AuthResult> RegisterTask = _auth.CreateUserWithEmailAndPasswordAsync(_email, _password);
             //Wait until the task completes
             yield return new WaitUntil(predicate: () => RegisterTask.IsCompleted);
 
@@ -161,15 +164,15 @@ public class AuthManager : MonoBehaviour
             {
                 //User has now been created
                 //Now get the result
-                User = RegisterTask.Result.User;
+                _user = RegisterTask.Result.User;
 
-                if (User != null)
+                if (_user != null)
                 {
                     //Create a user profile and set the username
                     UserProfile profile = new UserProfile { DisplayName = _username };
 
                     //Call the Firebase auth update user profile function passing the profile with the username
-                    Task ProfileTask = User.UpdateUserProfileAsync(profile);
+                    Task ProfileTask = _user.UpdateUserProfileAsync(profile);
                     //Wait until the task completes
                     yield return new WaitUntil(predicate: () => ProfileTask.IsCompleted);
 
@@ -185,7 +188,7 @@ public class AuthManager : MonoBehaviour
                     {
                         //Username is now set
                         //Now return to login screen
-                        UIManager.instance.LoginScreen();
+                        UIManager.Instance.LoginScreen();
                         warningRegisterText.text = "";
                     }
                 }

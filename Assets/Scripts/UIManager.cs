@@ -1,61 +1,82 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using TMPro;
+﻿using UnityEngine;
 
 public class UIManager : MonoBehaviour
 {
-    public static UIManager instance;
+    public static UIManager Instance;
 
-    //Screen object variables
-    public GameObject loginUI;
-    public GameObject registerUI;
-    public GameObject userDataUI;
-    public GameObject scoreboardUI;
+    public GameObject LoginPanel;
+    public GameObject RegisterPanel;
+    public GameObject UserDataPanel;
+    public GameObject ScoreboardPanel;
+    public GameObject LevelFinishPanel;
 
     private void Awake()
     {
-        if (instance == null)
+        if (Instance == null)
         {
-            instance = this;
+            Instance = this;
         }
-        else if (instance != null)
+        else if (Instance != null)
         {
-            Debug.Log("Instance already exists, destroying object!");
             Destroy(this);
         }
     }
 
-    //Functions to change the login screen UI
-
-    public void ClearScreen() //Turn off all screens
+    private void OnEnable()
     {
-        loginUI.SetActive(false);
-        registerUI.SetActive(false);
-        userDataUI.SetActive(false);
-        scoreboardUI.SetActive(false);
+        SubscribeEvents();
     }
 
-    public void LoginScreen() //Back button
+
+    private void OnDisable()
     {
-        ClearScreen();
-        loginUI.SetActive(true);
-    }
-    public void RegisterScreen() // Regester button
-    {
-        ClearScreen();
-        registerUI.SetActive(true);
+        UnsubscribeEvents();
     }
 
-    public void UserDataScreen() //Logged in
+
+    public void ClearScreen()
     {
-        ClearScreen();
-        userDataUI.SetActive(true);
+        LoginPanel.SetActive(false);
+        RegisterPanel.SetActive(false);
+        UserDataPanel.SetActive(false);
+        ScoreboardPanel.SetActive(false);
     }
 
-    public void ScoreboardScreen() //Scoreboard button
+    public void LoginScreen()
     {
         ClearScreen();
-        scoreboardUI.SetActive(true);
+        LoginPanel.SetActive(true);
+    }
+    public void RegisterScreen()
+    {
+        ClearScreen();
+        RegisterPanel.SetActive(true);
+    }
+
+    public void UserDataScreen()
+    {
+        ClearScreen();
+        UserDataPanel.SetActive(true);
+    }
+
+    public void ScoreboardScreen()
+    {
+        ClearScreen();
+        ScoreboardPanel.SetActive(true);
+    }
+
+    public void LevelFinishScreen()
+    {
+        LevelFinishPanel.SetActive(true);
+    }
+
+    private void SubscribeEvents()
+    {
+
+    }
+
+    private void UnsubscribeEvents()
+    {
+        Signals.OnGameFinished -= ctx => LevelFinishPanel.SetActive(true);
     }
 }

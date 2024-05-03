@@ -1,6 +1,7 @@
 using TMPro;
 using UnityEngine;
 using Tools;
+
 namespace Core
 {
     public class GameManager : SingletonMonoBehaviour<GameManager>
@@ -11,6 +12,7 @@ namespace Core
         [SerializeField] private Vector2Int _dimensions;
         private int _score;
         private MatchableGrid _grid;
+
         [ContextMenu("ClearAndPopulate")]
         private void ClearAndPopulate()
         {
@@ -50,7 +52,12 @@ namespace Core
         }
         public bool CanMoveMatchables()
         {
-            if (_maxAllowedMove <= 0) return false;
+            if (_maxAllowedMove <= 0)
+            {
+                Signals.OnGameFinished?.Invoke(true);
+                Signals.OnGetScore?.Invoke("score", _score);
+                return false;
+            }
             return true;
         }
         public void DecreaseMove()

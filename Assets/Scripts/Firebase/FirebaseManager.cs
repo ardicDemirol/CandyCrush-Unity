@@ -3,29 +3,20 @@ using UnityEngine;
 using Firebase;
 using Firebase.Auth;
 using Firebase.Database;
-using TMPro;
 using System.Linq;
 using System.Threading.Tasks;
+using Core;
 
 public class FirebaseManager : MonoBehaviour
 {
     //Firebase variables
     [Header("Firebase")]
     public DependencyStatus dependencyStatus;
-    public FirebaseAuth auth;    
-    public FirebaseUser User;
+    private FirebaseAuth _auth;
+    private FirebaseUser _user;
     public DatabaseReference DBreference;
 
-    //User Data variables
-    [Header("UserData")]
-    public TMP_InputField usernameField;
-    public TMP_InputField xpField;
-    public TMP_InputField killsField;
-    public TMP_InputField deathsField;
-    public GameObject scoreElement;
-    public Transform scoreboardContent;
-
-    void Awake()
+    private void Awake()
     {
         //Check that all of the necessary dependencies for Firebase are present on the system
         FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task =>
@@ -33,7 +24,6 @@ public class FirebaseManager : MonoBehaviour
             dependencyStatus = task.Result;
             if (dependencyStatus == DependencyStatus.Available)
             {
-                //If they are avalible Initialize Firebase
                 InitializeFirebase();
             }
             else
@@ -43,26 +33,35 @@ public class FirebaseManager : MonoBehaviour
         });
     }
 
+    private void OnEnable()
+    {
+        SubscribeEvents();
+    }
+
+
+    private void OnDisable()
+    {
+        UnsubscribeEvents();
+    }
+
+
+
     private void InitializeFirebase()
     {
         Debug.Log("Setting up Firebase Auth");
-        //Set the authentication instance object
-        auth = FirebaseAuth.DefaultInstance;
+        _auth = BackendManager.Instance.Auth;
+        _user = BackendManager.Instance.User;
         DBreference = FirebaseDatabase.DefaultInstance.RootReference;
     }
-    
-    public void SaveDataButton()
-    {
-        StartCoroutine(UpdateUsernameAuth(usernameField.text));
-        StartCoroutine(UpdateUsernameDatabase(usernameField.text));
 
-        StartCoroutine(UpdateXp(int.Parse(xpField.text)));
-        StartCoroutine(UpdateKills(int.Parse(killsField.text)));
-        StartCoroutine(UpdateDeaths(int.Parse(deathsField.text)));
+    public void SaveDataButton<T>(string key, T value)
+    {
+        StartCoroutine(UpdateDatabaseValue(key, value));
+
     }
     //Function for the scoreboard button
     public void ScoreboardButton()
-    {        
+    {
         StartCoroutine(LoadScoreboardData());
     }
 
@@ -72,7 +71,7 @@ public class FirebaseManager : MonoBehaviour
         UserProfile profile = new() { DisplayName = _username };
 
         //Call the Firebase auth update user profile function passing the profile with the username
-        Task ProfileTask = User.UpdateUserProfileAsync(profile);
+        Task ProfileTask = _user.UpdateUserProfileAsync(profile);
         //Wait until the task completes
         yield return new WaitUntil(predicate: () => ProfileTask.IsCompleted);
 
@@ -83,13 +82,15 @@ public class FirebaseManager : MonoBehaviour
         else
         {
             //Auth username is now updated
-        }        
+        }
     }
 
-    private IEnumerator UpdateUsernameDatabase(string _username)
+
+    private IEnumerator UpdateDatabaseValue<T>(string key, T value)
     {
-        //Set the currently logged in user username in the database
-        Task DBTask = DBreference.Child("users").Child(User.UserId).Child("username").SetValueAsync(_username);
+        Debug.Log(value);
+        //Set the currently logged in user data in the database
+        Task DBTask = DBreference.Child("users").Child(_user.UserId).Child(key).SetValueAsync(value);
 
         yield return new WaitUntil(predicate: () => DBTask.IsCompleted);
 
@@ -99,65 +100,14 @@ public class FirebaseManager : MonoBehaviour
         }
         else
         {
-            //Database username is now updated
+            Debug.Log($"{key} is now updated with value: {value}");
         }
     }
 
-    private IEnumerator UpdateXp(int _xp)
-    {
-        //Set the currently logged in user xp
-        Task DBTask = DBreference.Child("users").Child(User.UserId).Child("xp").SetValueAsync(_xp);
-
-        yield return new WaitUntil(predicate: () => DBTask.IsCompleted);
-
-        if (DBTask.Exception != null)
-        {
-            Debug.LogWarning(message: $"Failed to register task with {DBTask.Exception}");
-        }
-        else
-        {
-            //Xp is now updated
-        }
-    }
-
-    private IEnumerator UpdateKills(int _kills)
-    {
-        //Set the currently logged in user kills
-        Task DBTask = DBreference.Child("users").Child(User.UserId).Child("kills").SetValueAsync(_kills);
-
-        yield return new WaitUntil(predicate: () => DBTask.IsCompleted);
-
-        if (DBTask.Exception != null)
-        {
-            Debug.LogWarning(message: $"Failed to register task with {DBTask.Exception}");
-        }
-        else
-        {
-            //Kills are now updated
-        }
-    }
-
-    private IEnumerator UpdateDeaths(int _deaths)
-    {
-        //Set the currently logged in user deaths
-        Task DBTask = DBreference.Child("users").Child(User.UserId).Child("deaths").SetValueAsync(_deaths);
-
-        yield return new WaitUntil(predicate: () => DBTask.IsCompleted);
-
-        if (DBTask.Exception != null)
-        {
-            Debug.LogWarning(message: $"Failed to register task with {DBTask.Exception}");
-        }
-        else
-        {
-            //Deaths are now updated
-        }
-    }
-
-    private IEnumerator LoadUserData()
+    private IEnumerator LoadUserData(string key)
     {
         //Get the currently logged in user data
-        Task<DataSnapshot> DBTask = DBreference.Child("users").Child(User.UserId).GetValueAsync();
+        Task<DataSnapshot> DBTask = DBreference.Child("users").Child(_user.UserId).GetValueAsync();
 
         yield return new WaitUntil(predicate: () => DBTask.IsCompleted);
 
@@ -168,18 +118,18 @@ public class FirebaseManager : MonoBehaviour
         else if (DBTask.Result.Value == null)
         {
             //No data exists yet
-            xpField.text = "0";
-            killsField.text = "0";
-            deathsField.text = "0";
+            //xpField.text = "0";
+            //killsField.text = "0";
+            //deathsField.text = "0";
         }
         else
         {
             //Data has been retrieved
             DataSnapshot snapshot = DBTask.Result;
 
-            xpField.text = snapshot.Child("xp").Value.ToString();
-            killsField.text = snapshot.Child("kills").Value.ToString();
-            deathsField.text = snapshot.Child("deaths").Value.ToString();
+            //xpField.text = snapshot.Child("xp").Value.ToString();
+            //killsField.text = snapshot.Child("kills").Value.ToString();
+            //deathsField.text = snapshot.Child("deaths").Value.ToString();
         }
     }
 
@@ -200,10 +150,10 @@ public class FirebaseManager : MonoBehaviour
             DataSnapshot snapshot = DBTask.Result;
 
             //Destroy any existing scoreboard elements
-            foreach (Transform child in scoreboardContent.transform)
-            {
-                Destroy(child.gameObject);
-            }
+            //foreach (Transform child in scoreboardContent.transform)
+            //{
+            //    Destroy(child.gameObject);
+            //}
 
             //Loop through every users UID
             foreach (DataSnapshot childSnapshot in snapshot.Children.Reverse<DataSnapshot>())
@@ -214,12 +164,23 @@ public class FirebaseManager : MonoBehaviour
                 int xp = int.Parse(childSnapshot.Child("xp").Value.ToString());
 
                 //Instantiate new scoreboard elements
-                GameObject scoreboardElement = Instantiate(scoreElement, scoreboardContent);
-                scoreboardElement.GetComponent<ScoreElement>().NewScoreElement(username, kills, deaths, xp);
+                //GameObject scoreboardElement = Instantiate(scoreElement, scoreboardContent);
+                //scoreboardElement.GetComponent<ScoreElement>().NewScoreElement(username, kills, deaths, xp);
             }
 
             //Go to scoareboard screen
-            UIManager.instance.ScoreboardScreen();
+            UIManager.Instance.ScoreboardScreen();
         }
     }
+
+    private void SubscribeEvents()
+    {
+        Signals.OnGetScore += SaveDataButton;
+    }
+
+    private void UnsubscribeEvents()
+    {
+        Signals.OnGetScore -= SaveDataButton;
+    }
+
 }
