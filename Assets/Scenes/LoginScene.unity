@@ -463,7 +463,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46cfea6d4b045f74e9ceb330be6bac6c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _dontDestroyOnLoad: 1
+  _dontDestroyOnLoad: 0
 --- !u!4 &67357524
 Transform:
   m_ObjectHideFlags: 0
@@ -3095,15 +3095,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dependencyStatus: 0
-  emailLoginField: {fileID: 728009125}
-  passwordLoginField: {fileID: 288471328}
-  warningLoginText: {fileID: 1331667005}
-  confirmLoginText: {fileID: 1952847487}
-  usernameRegisterField: {fileID: 28153690}
-  emailRegisterField: {fileID: 1705510913}
-  passwordRegisterField: {fileID: 1484623463}
-  passwordRegisterVerifyField: {fileID: 2049681267}
-  warningRegisterText: {fileID: 537031899}
   usernameField: {fileID: 0}
   xpField: {fileID: 0}
   killsField: {fileID: 0}

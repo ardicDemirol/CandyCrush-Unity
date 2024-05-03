@@ -49,17 +49,25 @@ internal class SceneController : SingletonMonoBehaviour<SceneController>
         
     }
 
-    #endregion
-    public void LoadScene(int sceneIndex,float waitTime)
+
+    public void LoadScene(int sceneIndex, float waitTime)
     {
-        StartCoroutine(LoadSceneCoroutine(sceneIndex,waitTime));
+        StartCoroutine(LoadSceneCoroutine(sceneIndex, waitTime));
+    }
+    public void LoadScene()
+    {
+        StartCoroutine(LoadSceneCoroutine(2, 0f));
     }
 
-    private IEnumerator LoadSceneCoroutine(int sceneIndex,float waitTime)
+    private IEnumerator LoadSceneCoroutine(int sceneIndex, float waitTime)
     {
         yield return new WaitForSeconds(waitTime);
         SceneManager.LoadSceneAsync(sceneIndex);
     }
+
+
+    #endregion
+
 
 
 
