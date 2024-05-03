@@ -1,0 +1,10 @@
+*.bundle filter=lfs diff=lfs merge=lfs -text
+*.so filter=lfs diff=lfs merge=lfs -text
+Assets/Firebase/Plugins/x86/FirebaseCppApp-11_9_0.bundle filter=lfs diff=lfs merge=lfs -text
+Assets/Firebase/Plugins/x86/FirebaseCppApp-11_9_0.so filter=lfs diff=lfs merge=lfs -text
+Assets/Plugins/tvOS/Firebase/libFirebaseCppDatabase.a filter=lfs diff=lfs merge=lfs -text
+Assets/Plugins/tvOS/Firebase/libFirebaseCppAuth.a filter=lfs diff=lfs merge=lfs -text
+Assets/Plugins/tvOS/Firebase/libFirebaseCppApp.a filter=lfs diff=lfs merge=lfs -text
+Assets/Plugins/iOS/Firebase/libFirebaseCppDatabase.a filter=lfs diff=lfs merge=lfs -text
+Assets/Plugins/iOS/Firebase/libFirebaseCppAuth.a filter=lfs diff=lfs merge=lfs -text
+Assets/Plugins/iOS/Firebase/libFirebaseCppApp.a filter=lfs diff=lfs merge=lfs -text
