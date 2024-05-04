@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using TMPro;
+using UnityEngine;
 
 public class UIManager : MonoBehaviour
 {
@@ -9,6 +10,8 @@ public class UIManager : MonoBehaviour
     public GameObject UserDataPanel;
     public GameObject ScoreboardPanel;
     public GameObject LevelFinishPanel;
+
+    public TextMeshProUGUI[] MaxScores;
 
     private void Awake()
     {

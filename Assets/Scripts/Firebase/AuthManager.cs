@@ -4,7 +4,7 @@ using Firebase;
 using Firebase.Auth;
 using TMPro;
 using System.Threading.Tasks;
-using Core;
+using Firebase.Database;
 
 public class AuthManager : MonoBehaviour
 {
@@ -13,6 +13,7 @@ public class AuthManager : MonoBehaviour
     public DependencyStatus dependencyStatus;
     private FirebaseAuth _auth;
     private FirebaseUser _user;
+    private DatabaseReference _dbReference;
 
     //Login variables
     [Header("Login")]
@@ -53,6 +54,8 @@ public class AuthManager : MonoBehaviour
         //Set the authentication instance object
         _auth = FirebaseAuth.DefaultInstance;
         BackendManager.Instance.Auth = _auth;
+        _dbReference = FirebaseDatabase.DefaultInstance.RootReference;
+        BackendManager.Instance.DBreference = _dbReference;
     }
 
     //Function for the login button

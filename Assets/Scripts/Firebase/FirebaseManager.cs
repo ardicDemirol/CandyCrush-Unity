@@ -6,19 +6,22 @@ using Firebase.Database;
 using System.Linq;
 using System.Threading.Tasks;
 using Core;
+using System;
 
 public class FirebaseManager : MonoBehaviour
 {
     //Firebase variables
     [Header("Firebase")]
     public DependencyStatus dependencyStatus;
-    private FirebaseAuth _auth;
     private FirebaseUser _user;
-    public DatabaseReference DBreference;
+    private DatabaseReference _dbReference;
+
+    private int _maxCore;
+    private const byte FIVE = 5;
+
 
     private void Awake()
     {
-        //Check that all of the necessary dependencies for Firebase are present on the system
         FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task =>
         {
             dependencyStatus = task.Result;
@@ -46,23 +49,25 @@ public class FirebaseManager : MonoBehaviour
 
 
 
+
+
     private void InitializeFirebase()
     {
-        Debug.Log("Setting up Firebase Auth");
-        _auth = BackendManager.Instance.Auth;
         _user = BackendManager.Instance.User;
-        DBreference = FirebaseDatabase.DefaultInstance.RootReference;
+        _dbReference = BackendManager.Instance.DBreference;
     }
 
     public void SaveDataButton<T>(string key, T value)
     {
-        StartCoroutine(UpdateDatabaseValue(key, value));
-
+        StartCoroutine(SaveMaxScoreToDatabase(key, value));
     }
-    //Function for the scoreboard button
     public void ScoreboardButton()
     {
         StartCoroutine(LoadScoreboardData());
+    }
+    public void StartLoadUserData()
+    {
+        StartCoroutine(LoadUserData());
     }
 
     private IEnumerator UpdateUsernameAuth(string _username)
@@ -86,29 +91,27 @@ public class FirebaseManager : MonoBehaviour
     }
 
 
-    private IEnumerator UpdateDatabaseValue<T>(string key, T value)
+    private IEnumerator SaveMaxScoreToDatabase<T>(string key, T value)
     {
-        Debug.Log(value);
-        //Set the currently logged in user data in the database
-        Task DBTask = DBreference.Child("users").Child(_user.UserId).Child(key).SetValueAsync(value);
+        Task<DataSnapshot> DBTaskLoad = _dbReference.Child("users").Child(_user.UserId).Child(key).GetValueAsync();
+        yield return new WaitUntil(() => DBTaskLoad.IsCompleted);
 
-        yield return new WaitUntil(predicate: () => DBTask.IsCompleted);
-
-        if (DBTask.Exception != null)
+        DataSnapshot snapshot = DBTaskLoad.Result;
+        
+        if (Convert.ToInt32(value) > Convert.ToInt32(snapshot.Value))
         {
-            Debug.LogWarning(message: $"Failed to register task with {DBTask.Exception}");
-        }
-        else
-        {
-            Debug.Log($"{key} is now updated with value: {value}");
+            Task DBTask = _dbReference.Child("users").Child(_user.UserId).Child(key).SetValueAsync(value);
+            Debug.Log(value);
+            yield return new WaitUntil(() => DBTask.IsCompleted);
+            Debug.Log("New value is bigger than old value");
         }
     }
 
-    private IEnumerator LoadUserData(string key)
+
+    private IEnumerator LoadUserData()
     {
         //Get the currently logged in user data
-        Task<DataSnapshot> DBTask = DBreference.Child("users").Child(_user.UserId).GetValueAsync();
-
+        Task<DataSnapshot> DBTask = _dbReference.Child("users").Child(_user.UserId).GetValueAsync();
         yield return new WaitUntil(predicate: () => DBTask.IsCompleted);
 
         if (DBTask.Exception != null)
@@ -117,26 +120,28 @@ public class FirebaseManager : MonoBehaviour
         }
         else if (DBTask.Result.Value == null)
         {
-            //No data exists yet
-            //xpField.text = "0";
-            //killsField.text = "0";
-            //deathsField.text = "0";
         }
         else
         {
-            //Data has been retrieved
             DataSnapshot snapshot = DBTask.Result;
 
-            //xpField.text = snapshot.Child("xp").Value.ToString();
-            //killsField.text = snapshot.Child("kills").Value.ToString();
-            //deathsField.text = snapshot.Child("deaths").Value.ToString();
+            for (int i = 0; i < FIVE; i++)
+            {
+                if (snapshot.Child($"level{i}Score").Value == null)
+                {
+                    UIManager.Instance.MaxScores[i].text = "0";
+                    continue;
+                }
+                UIManager.Instance.MaxScores[i].text = snapshot.Child($"level{i}Score").Value.ToString();
+                Debug.Log($"Level {i} score: {snapshot.Child($"level{i}Score").Value}");
+            }
         }
     }
 
     private IEnumerator LoadScoreboardData()
     {
         //Get all the users data ordered by kills amount
-        Task<DataSnapshot> DBTask = DBreference.Child("users").OrderByChild("kills").GetValueAsync();
+        Task<DataSnapshot> DBTask = _dbReference.Child("users").OrderByChild("kills").GetValueAsync();
 
         yield return new WaitUntil(predicate: () => DBTask.IsCompleted);
 
@@ -172,6 +177,11 @@ public class FirebaseManager : MonoBehaviour
             UIManager.Instance.ScoreboardScreen();
         }
     }
+
+
+
+
+
 
     private void SubscribeEvents()
     {

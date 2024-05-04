@@ -6,6 +6,7 @@ namespace Core
 {
     public class GameManager : SingletonMonoBehaviour<GameManager>
     {
+        public int LevelIndex;
         [SerializeField] private int _maxAllowedMove = 40;
         [SerializeField] private TextMeshProUGUI _scoreText;
         [SerializeField] private TextMeshProUGUI _moveText;
@@ -52,10 +53,10 @@ namespace Core
         }
         public bool CanMoveMatchables()
         {
-            if (_maxAllowedMove <= 0)
+            if (_maxAllowedMove < 1)
             {
                 Signals.OnGameFinished?.Invoke(true);
-                Signals.OnGetScore?.Invoke("score", _score);
+                Signals.OnGetScore?.Invoke($"level{LevelIndex}Score", _score);
                 return false;
             }
             return true;
