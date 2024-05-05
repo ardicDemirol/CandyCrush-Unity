@@ -68,12 +68,14 @@ public class FirebaseManager : MonoBehaviour
     public void StartLoadUserData()
     {
         StartCoroutine(LoadUserData());
+        StartCoroutine(UpdateUsernameDatabase(_user.DisplayName));
+
     }
 
-    private IEnumerator UpdateUsernameAuth(string _username)
+    private IEnumerator UpdateUsernameAuth(string username)
     {
         //Create a user profile and set the username
-        UserProfile profile = new() { DisplayName = _username };
+        UserProfile profile = new() { DisplayName = username };
 
         //Call the Firebase auth update user profile function passing the profile with the username
         Task ProfileTask = _user.UpdateUserProfileAsync(profile);
@@ -90,23 +92,41 @@ public class FirebaseManager : MonoBehaviour
         }
     }
 
+    private IEnumerator UpdateUsernameDatabase(string username)
+    {
+        Task DBTask = _dbReference.Child("users").Child(_user.UserId).Child("username").SetValueAsync(username);
+
+        yield return new WaitUntil(predicate: () => DBTask.IsCompleted);
+
+        if (DBTask.Exception != null)
+        {
+            Debug.LogWarning(message: $"Failed to register task with {DBTask.Exception}");
+        }
+        else
+        {
+            //Database username is now updated
+        }
+    }
+
 
     private IEnumerator SaveMaxScoreToDatabase<T>(string key, T value)
     {
-        Task<DataSnapshot> DBTaskLoad = _dbReference.Child("users").Child(_user.UserId).Child(key).GetValueAsync();
+        Task<DataSnapshot> DBTaskLoad = _dbReference.Child("users").Child(_user.UserId).GetValueAsync();
         yield return new WaitUntil(() => DBTaskLoad.IsCompleted);
 
-        DataSnapshot snapshot = DBTaskLoad.Result;
-        
+        Task<DataSnapshot> DBTaskLoad2 = _dbReference.Child("users").Child(_user.UserId).Child(key).GetValueAsync();
+        yield return new WaitUntil(() => DBTaskLoad2.IsCompleted);
+
+        DataSnapshot snapshot = DBTaskLoad2.Result;
+
+
         if (Convert.ToInt32(value) > Convert.ToInt32(snapshot.Value))
         {
             Task DBTask = _dbReference.Child("users").Child(_user.UserId).Child(key).SetValueAsync(value);
             Debug.Log(value);
             yield return new WaitUntil(() => DBTask.IsCompleted);
-            Debug.Log("New value is bigger than old value");
         }
     }
-
 
     private IEnumerator LoadUserData()
     {
@@ -129,10 +149,10 @@ public class FirebaseManager : MonoBehaviour
             {
                 if (snapshot.Child($"level{i}Score").Value == null)
                 {
-                    UIManager.Instance.MaxScores[i].text = "0";
+                    MenuController.Instance.MaxScores[i].text = "0";
                     continue;
                 }
-                UIManager.Instance.MaxScores[i].text = snapshot.Child($"level{i}Score").Value.ToString();
+                MenuController.Instance.MaxScores[i].text = snapshot.Child($"level{i}Score").Value.ToString();
                 Debug.Log($"Level {i} score: {snapshot.Child($"level{i}Score").Value}");
             }
         }

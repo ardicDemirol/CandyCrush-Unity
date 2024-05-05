@@ -1,5 +1,4 @@
-﻿using TMPro;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class UIManager : MonoBehaviour
 {
@@ -7,11 +6,10 @@ public class UIManager : MonoBehaviour
 
     public GameObject LoginPanel;
     public GameObject RegisterPanel;
-    public GameObject UserDataPanel;
     public GameObject ScoreboardPanel;
     public GameObject LevelFinishPanel;
 
-    public TextMeshProUGUI[] MaxScores;
+   
 
     private void Awake()
     {
@@ -41,8 +39,7 @@ public class UIManager : MonoBehaviour
     {
         LoginPanel.SetActive(false);
         RegisterPanel.SetActive(false);
-        UserDataPanel.SetActive(false);
-        ScoreboardPanel.SetActive(false);
+        //ScoreboardPanel.SetActive(false);
     }
 
     public void LoginScreen()
@@ -59,13 +56,12 @@ public class UIManager : MonoBehaviour
     public void UserDataScreen()
     {
         ClearScreen();
-        UserDataPanel.SetActive(true);
     }
 
     public void ScoreboardScreen()
     {
         ClearScreen();
-        ScoreboardPanel.SetActive(true);
+        //ScoreboardPanel.SetActive(true);
     }
 
     public void LevelFinishScreen()
@@ -75,11 +71,9 @@ public class UIManager : MonoBehaviour
 
     private void SubscribeEvents()
     {
-
     }
 
     private void UnsubscribeEvents()
     {
-        Signals.OnGameFinished -= ctx => LevelFinishPanel.SetActive(true);
     }
 }
