@@ -54,9 +54,9 @@ internal class SceneController : SingletonMonoBehaviour<SceneController>
     {
         StartCoroutine(LoadSceneCoroutine(sceneIndex, waitTime));
     }
-    public void LoadScene()
+    public void LoadScene(int sceneIndex)
     {
-        StartCoroutine(LoadSceneCoroutine(2, 0f));
+        StartCoroutine(LoadSceneCoroutine(sceneIndex, 0f));
     }
 
     private IEnumerator LoadSceneCoroutine(int sceneIndex, float waitTime)

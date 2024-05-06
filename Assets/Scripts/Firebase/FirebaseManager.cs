@@ -3,20 +3,25 @@ using UnityEngine;
 using Firebase;
 using Firebase.Auth;
 using Firebase.Database;
-using System.Linq;
 using System.Threading.Tasks;
-using Core;
 using System;
 
 public class FirebaseManager : MonoBehaviour
 {
-    //Firebase variables
     [Header("Firebase")]
-    public DependencyStatus dependencyStatus;
+    [SerializeField] private DependencyStatus dependencyStatus;
     private FirebaseUser _user;
     private DatabaseReference _dbReference;
 
-    private int _maxCore;
+    private int _totalScore;
+    private string _level0Score;
+    private string _level1Score;
+    private string _level2Score;
+    private string _level3Score;
+    private string _level4Score;
+    private string _totalScoreText;
+    private string _username;
+
     private const byte FIVE = 5;
 
 
@@ -41,15 +46,10 @@ public class FirebaseManager : MonoBehaviour
         SubscribeEvents();
     }
 
-
     private void OnDisable()
     {
         UnsubscribeEvents();
     }
-
-
-
-
 
     private void InitializeFirebase()
     {
@@ -57,9 +57,13 @@ public class FirebaseManager : MonoBehaviour
         _dbReference = BackendManager.Instance.DBreference;
     }
 
-    public void SaveDataButton<T>(string key, T value)
+    public void SaveData<T>(string key, T value)
     {
-        StartCoroutine(SaveMaxScoreToDatabase(key, value));
+        StartCoroutine(SaveMaxScore(key, value));
+    }
+    public void SaveLevelIndex<T>(T value)
+    {
+        StartCoroutine(SaveLastSuccessLevelIndex(value));
     }
     public void ScoreboardButton()
     {
@@ -68,18 +72,15 @@ public class FirebaseManager : MonoBehaviour
     public void StartLoadUserData()
     {
         StartCoroutine(LoadUserData());
-        StartCoroutine(UpdateUsernameDatabase(_user.DisplayName));
-
+        StartCoroutine(LoadLastSuccessLevelIndex());
+        StartCoroutine(UpdateUsername(_user.DisplayName));
     }
+
 
     private IEnumerator UpdateUsernameAuth(string username)
     {
-        //Create a user profile and set the username
         UserProfile profile = new() { DisplayName = username };
-
-        //Call the Firebase auth update user profile function passing the profile with the username
         Task ProfileTask = _user.UpdateUserProfileAsync(profile);
-        //Wait until the task completes
         yield return new WaitUntil(predicate: () => ProfileTask.IsCompleted);
 
         if (ProfileTask.Exception != null)
@@ -92,9 +93,9 @@ public class FirebaseManager : MonoBehaviour
         }
     }
 
-    private IEnumerator UpdateUsernameDatabase(string username)
+    private IEnumerator UpdateUsername(string username)
     {
-        Task DBTask = _dbReference.Child("users").Child(_user.UserId).Child("username").SetValueAsync(username);
+      Task DBTask = _dbReference.Child("users").Child(_user.UserId).Child("username").SetValueAsync(username);
 
         yield return new WaitUntil(predicate: () => DBTask.IsCompleted);
 
@@ -109,37 +110,72 @@ public class FirebaseManager : MonoBehaviour
     }
 
 
-    private IEnumerator SaveMaxScoreToDatabase<T>(string key, T value)
+    private IEnumerator SaveMaxScore<T>(string key, T value)
     {
-        Task<DataSnapshot> DBTaskLoad = _dbReference.Child("users").Child(_user.UserId).GetValueAsync();
-        yield return new WaitUntil(() => DBTaskLoad.IsCompleted);
+        Task<DataSnapshot> DBTaskUserIDLoad = _dbReference.Child("users").Child(_user.UserId).GetValueAsync();
+        yield return new WaitUntil(() => DBTaskUserIDLoad.IsCompleted);
 
-        Task<DataSnapshot> DBTaskLoad2 = _dbReference.Child("users").Child(_user.UserId).Child(key).GetValueAsync();
-        yield return new WaitUntil(() => DBTaskLoad2.IsCompleted);
+        Task<DataSnapshot> DBTasUserIDChildLoad = _dbReference.Child("users").Child(_user.UserId).Child(key).GetValueAsync();
+        yield return new WaitUntil(() => DBTasUserIDChildLoad.IsCompleted);
 
-        DataSnapshot snapshot = DBTaskLoad2.Result;
-
-
-        if (Convert.ToInt32(value) > Convert.ToInt32(snapshot.Value))
+        DataSnapshot snapshotUserID = DBTasUserIDChildLoad.Result;
+        if (Convert.ToInt32(value) > Convert.ToInt32(snapshotUserID.Value))
         {
             Task DBTask = _dbReference.Child("users").Child(_user.UserId).Child(key).SetValueAsync(value);
             Debug.Log(value);
             yield return new WaitUntil(() => DBTask.IsCompleted);
+
+            Task<DataSnapshot> DBTaskUserIDLoad2 = _dbReference.Child("users").Child(_user.UserId).GetValueAsync();
+            yield return new WaitUntil(() => DBTaskUserIDLoad2.IsCompleted);
+
+
+            DataSnapshot snapshotUsers = DBTaskUserIDLoad2.Result;
+            if (snapshotUsers.HasChild("level0Score"))
+            {
+                _level0Score = snapshotUsers.Child("level0Score").Value.ToString();
+                _totalScore += Convert.ToInt32(_level0Score);
+            }
+            if (snapshotUsers.HasChild("level1Score"))
+            {
+                _level1Score = snapshotUsers.Child("level1Score").Value.ToString();
+                _totalScore += Convert.ToInt32(_level1Score);
+            }
+            if (snapshotUsers.HasChild("level2Score"))
+            {
+                _level2Score = snapshotUsers.Child("level2Score").Value.ToString();
+                _totalScore += Convert.ToInt32(_level2Score);
+            }
+            if (snapshotUsers.HasChild("level3Score"))
+            {
+                _level3Score = snapshotUsers.Child("level3Score").Value.ToString();
+                _totalScore += Convert.ToInt32(_level3Score);
+            }
+            if (snapshotUsers.HasChild("level4Score"))
+            {
+                _level4Score = snapshotUsers.Child("level4Score").Value.ToString();
+                _totalScore += Convert.ToInt32(_level4Score);
+            }
+
+            Task DBTaskTotalScore = _dbReference.Child("users").Child(_user.UserId).Child("totalScore").SetValueAsync(_totalScore);
+            yield return new WaitUntil(() => DBTaskTotalScore.IsCompleted);
+
         }
+    }
+
+    private IEnumerator SaveLastSuccessLevelIndex<T>(T value)
+    {
+        Task DBTaskLastLevelIndex = _dbReference.Child("users").Child(_user.UserId).Child("lastLevelIndex").SetValueAsync(value);
+        yield return new WaitUntil(() => DBTaskLastLevelIndex.IsCompleted);
     }
 
     private IEnumerator LoadUserData()
     {
-        //Get the currently logged in user data
         Task<DataSnapshot> DBTask = _dbReference.Child("users").Child(_user.UserId).GetValueAsync();
         yield return new WaitUntil(predicate: () => DBTask.IsCompleted);
 
         if (DBTask.Exception != null)
         {
             Debug.LogWarning(message: $"Failed to register task with {DBTask.Exception}");
-        }
-        else if (DBTask.Result.Value == null)
-        {
         }
         else
         {
@@ -150,67 +186,105 @@ public class FirebaseManager : MonoBehaviour
                 if (snapshot.Child($"level{i}Score").Value == null)
                 {
                     MenuController.Instance.MaxScores[i].text = "0";
+                    Task DBCreateTask = _dbReference.Child("users").Child(_user.UserId).Child($"level{i}Score").SetValueAsync(0);
+                    yield return new WaitUntil(predicate: () => DBTask.IsCompleted);
                     continue;
                 }
                 MenuController.Instance.MaxScores[i].text = snapshot.Child($"level{i}Score").Value.ToString();
-                Debug.Log($"Level {i} score: {snapshot.Child($"level{i}Score").Value}");
             }
+        }
+    }
+
+    private IEnumerator LoadLastSuccessLevelIndex()
+    {
+        Task<DataSnapshot> DBTaskLastLevelIndex = _dbReference.Child("users").Child(_user.UserId).Child("lastLevelIndex").GetValueAsync();
+        yield return new WaitUntil(predicate: () => DBTaskLastLevelIndex.IsCompleted);
+
+        DataSnapshot snapshot = DBTaskLastLevelIndex.Result;
+
+        if (snapshot.Value == null)
+        {
+            Task DBCreateTask = _dbReference.Child("users").Child(_user.UserId).Child("lastLevelIndex").SetValueAsync(0);
+            yield return new WaitUntil(predicate: () => DBCreateTask.IsCompleted);
+        }
+
+        Task<DataSnapshot> DBTaskLastLevelIndex2 = _dbReference.Child("users").Child(_user.UserId).Child("lastLevelIndex").GetValueAsync();
+        yield return new WaitUntil(predicate: () => DBTaskLastLevelIndex2.IsCompleted);
+        DataSnapshot snapshot2 = DBTaskLastLevelIndex2.Result;
+        for (int i = 0; i <= int.Parse(snapshot2.Value.ToString()); i++)
+        {
+            MenuController.Instance.LevelButtons[i].interactable = true;
         }
     }
 
     private IEnumerator LoadScoreboardData()
     {
-        //Get all the users data ordered by kills amount
-        Task<DataSnapshot> DBTask = _dbReference.Child("users").OrderByChild("kills").GetValueAsync();
+        Task<DataSnapshot> DBTask2 = _dbReference.Child("users").OrderByChild("totalScore").GetValueAsync();
+        yield return new WaitUntil(predicate: () => DBTask2.IsCompleted);
 
-        yield return new WaitUntil(predicate: () => DBTask.IsCompleted);
-
-        if (DBTask.Exception != null)
+        if (DBTask2.Exception != null)
         {
-            Debug.LogWarning(message: $"Failed to register task with {DBTask.Exception}");
+            Debug.LogWarning(message: $"Failed to register task with {DBTask2.Exception}");
         }
         else
         {
-            //Data has been retrieved
-            DataSnapshot snapshot = DBTask.Result;
+            DataSnapshot snapshot = DBTask2.Result;
 
-            //Destroy any existing scoreboard elements
-            //foreach (Transform child in scoreboardContent.transform)
-            //{
-            //    Destroy(child.gameObject);
-            //}
-
-            //Loop through every users UID
-            foreach (DataSnapshot childSnapshot in snapshot.Children.Reverse<DataSnapshot>())
+            foreach (Transform child in MenuController.Instance.ScoreboardContent.transform)
             {
-                string username = childSnapshot.Child("username").Value.ToString();
-                int kills = int.Parse(childSnapshot.Child("kills").Value.ToString());
-                int deaths = int.Parse(childSnapshot.Child("deaths").Value.ToString());
-                int xp = int.Parse(childSnapshot.Child("xp").Value.ToString());
-
-                //Instantiate new scoreboard elements
-                //GameObject scoreboardElement = Instantiate(scoreElement, scoreboardContent);
-                //scoreboardElement.GetComponent<ScoreElement>().NewScoreElement(username, kills, deaths, xp);
+                Destroy(child.gameObject);
             }
 
-            //Go to scoareboard screen
-            UIManager.Instance.ScoreboardScreen();
+            foreach (DataSnapshot childSnapshot in snapshot.Children)
+            {
+
+                if (childSnapshot.HasChild("username"))
+                {
+                    _username = childSnapshot.Child("username").Value.ToString();
+                }
+                if (childSnapshot.HasChild("level0Score"))
+                {
+                    _level0Score = childSnapshot.Child("level0Score").Value.ToString();
+                }
+                if (childSnapshot.HasChild("level1Score"))
+                {
+                    _level1Score = childSnapshot.Child("level1Score").Value.ToString();
+                }
+                if (childSnapshot.HasChild("level2Score"))
+                {
+                    _level2Score = childSnapshot.Child("level2Score").Value.ToString();
+                }
+                if (childSnapshot.HasChild("level3Score"))
+                {
+                    _level3Score = childSnapshot.Child("level3Score").Value.ToString();
+                }
+                if (childSnapshot.HasChild("level4Score"))
+                {
+                    _level4Score = childSnapshot.Child("level4Score").Value.ToString();
+                }
+                if (childSnapshot.HasChild("totalScore"))
+                {
+                    _totalScoreText = childSnapshot.Child("totalScore").Value.ToString();
+                }
+                GameObject scoreboardElement = Instantiate(MenuController.Instance.ScoreElement, MenuController.Instance.ScoreboardContent);
+                scoreboardElement.GetComponent<ScoreElement>().NewScoreElement(_username, _level0Score, _level1Score, _level2Score, _level3Score, _level4Score, _totalScoreText);
+            }
+            MenuController.Instance.ScoreboardScreen();
         }
     }
-
-
-
-
 
 
     private void SubscribeEvents()
     {
-        Signals.OnGetScore += SaveDataButton;
+        Signals.OnGetScore += SaveData;
+        Signals.OnLevelCompleted += SaveLevelIndex;
     }
 
     private void UnsubscribeEvents()
     {
-        Signals.OnGetScore -= SaveDataButton;
+        Signals.OnGetScore -= SaveData;
+        Signals.OnLevelCompleted -= SaveLevelIndex;
     }
+
 
 }

@@ -7,6 +7,8 @@ namespace Core
     public class GameManager : SingletonMonoBehaviour<GameManager>
     {
         public int LevelIndex;
+        public int MinScore;
+        public bool LevelCompleted;
         [SerializeField] private int _maxAllowedMove = 40;
         [SerializeField] private TextMeshProUGUI _scoreText;
         [SerializeField] private TextMeshProUGUI _moveText;
@@ -40,7 +42,7 @@ namespace Core
         protected override void Awake()
         {
             base.Awake();
-            _grid = (MatchableGrid) MatchableGrid.Instance;
+            _grid = (MatchableGrid)MatchableGrid.Instance;
             _grid.InitializeGrid(_dimensions);
             _grid.PopulateGrid();
             _scoreText.text = _score.ToString("D5");
@@ -57,6 +59,10 @@ namespace Core
             {
                 Signals.OnGameFinished?.Invoke(true);
                 Signals.OnGetScore?.Invoke($"level{LevelIndex}Score", _score);
+                if (_score > MinScore)
+                {
+                    Signals.OnLevelCompleted?.Invoke(LevelIndex+1);
+                }
                 return false;
             }
             return true;
@@ -68,5 +74,4 @@ namespace Core
         }
     }
 }
-
 

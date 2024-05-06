@@ -8,6 +8,7 @@ internal static class Signals
 
     public static UnityAction<bool> OnGameFinished = delegate { };
     public static UnityAction<string,int> OnGetScore = delegate { };
+    public static UnityAction<int> OnLevelCompleted = delegate { };
 
     #endregion
 

@@ -145,7 +145,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &160969862
 RectTransform:
   m_ObjectHideFlags: 0
@@ -180,7 +180,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0, g: 0, b: 0, a: 0.7294118}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1771,12 +1771,16 @@ PrefabInstance:
     m_TransformParent: {fileID: 1477552361}
     m_Modifications:
     - target: {fileID: 2289713592523740856, guid: 9c347d59e0af47342a4ce31f9bca0f51, type: 3}
+      propertyPath: MinScore
+      value: 500000
+      objectReference: {fileID: 0}
+    - target: {fileID: 2289713592523740856, guid: 9c347d59e0af47342a4ce31f9bca0f51, type: 3}
       propertyPath: _moveText
       value: 
       objectReference: {fileID: 1072191403}
     - target: {fileID: 2289713592523740856, guid: 9c347d59e0af47342a4ce31f9bca0f51, type: 3}
       propertyPath: LevelIndex
-      value: 0
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2289713592523740856, guid: 9c347d59e0af47342a4ce31f9bca0f51, type: 3}
       propertyPath: _scoreText
@@ -3983,7 +3987,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: -20
   m_Sprite: {fileID: -5177388603050735206, guid: 8884154dfe85442a3a3578be807dbcdf, type: 3}
-  m_Color: {r: 0.1764706, g: 0.4039216, b: 0.6039216, a: 0.6431373}
+  m_Color: {r: 0, g: 0, b: 0, a: 0.6431373}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 2
@@ -4006,7 +4010,7 @@ GameObject:
   - component: {fileID: 1804743715}
   - component: {fileID: 1804743714}
   m_Layer: 5
-  m_Name: PlayButton
+  m_Name: MainMenuButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
