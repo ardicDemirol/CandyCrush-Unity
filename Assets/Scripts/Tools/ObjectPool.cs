@@ -7,8 +7,8 @@ namespace Tools
     {
         [Header("Pool Config")]
         [SerializeField] protected T _prefab;
-        [SerializeField] private int _size;
-        [SerializeField] private int _expandingSize;
+        [SerializeField] private int _size = 300;
+        [SerializeField] private int _expandingSize = 20;
         private bool _isReady = false;
 
         private Queue<T> _pooledObjects;
@@ -49,7 +49,6 @@ namespace Tools
 
             T newObj = _pooledObjects.Dequeue();
             newObj.gameObject.SetActive(active);
-            //newObj.transform.parent = null;
             return newObj;
         }
         public virtual void ReturnObject(T obj)

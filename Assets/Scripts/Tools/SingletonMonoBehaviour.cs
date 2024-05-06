@@ -5,7 +5,7 @@ namespace Tools
     public abstract class SingletonMonoBehaviour<T> : MonoBehaviour where T : SingletonMonoBehaviour<T>
     {
         [Header("Singleton Config")]
-        [SerializeField] private bool _dontDestroyOnLoad;
+        [SerializeField] private bool dontDestroyOnLoad;
         private static T instance;
         protected virtual void Awake()
         {
@@ -21,7 +21,7 @@ namespace Tools
             if (instance == null)
             {
                 instance = this as T;
-                if (_dontDestroyOnLoad)
+                if (dontDestroyOnLoad)
                     DontDestroyOnLoad(this);
             }
             else

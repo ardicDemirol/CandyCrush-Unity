@@ -5,11 +5,11 @@ namespace Tools
 {
     public abstract class GridSystem<T> : SingletonMonoBehaviour<GridSystem<T>>
     {
+        public Vector2Int Dimensions { get => _dimensions; }
+        public bool IsReady { get => _isReady; }
         private T[,] _data;
         private Vector2Int _dimensions = new(1, 1);
         private bool _isReady;
-        public Vector2Int Dimensions { get => _dimensions; }
-        public bool IsReady { get => _isReady; }
         public void InitializeGrid(Vector2Int dimensions)
         {
             _dimensions = dimensions;

@@ -2,12 +2,12 @@ using System.Collections;
 using UnityEngine;
 public class Movable : MonoBehaviour
 {
+    public bool IsMoving { get => _isMoving; }
     [SerializeField] private Vector3Int _startOffset = Vector3Int.zero;
     [SerializeField] private float _speed = 1f;
     private Vector3 _to, _from;
     private float _howFar;
     private bool _isMoving = false;
-    public bool IsMoving { get => _isMoving; }
     private Transform _transform;
     protected virtual void Awake()
     {

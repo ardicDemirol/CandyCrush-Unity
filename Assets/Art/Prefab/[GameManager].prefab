@@ -45,4 +45,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _dontDestroyOnLoad: 1
-  _dimensions: {x: 5, y: 5}
+  LevelIndex: 1
+  MinScore: 3500
+  _maxAllowedMove: 5
+  scoreText: {fileID: 0}
+  targetScoreText: {fileID: 0}
+  moveText: {fileID: 0}
+  dimensions: {x: 10, y: 10}

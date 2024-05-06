@@ -25,7 +25,7 @@ public class Match
     }
     private void CollectMatchPoint()
     {
-        int addScore = _matchableList.Count * 30; //30 point per matchable
+        int addScore = _matchableList.Count;
         GameManager.Instance.IncreaseScore(addScore);
         ScorePointFX scorePointFX = ScorePointFXPool.Instance.GetObject();
         scorePointFX.PlayVFX(_originMatchable.transform.position, addScore, _originMatchable.Variant.color);
@@ -137,7 +137,7 @@ public class Match
             if (isTransformed && matchable == _originMatchable) continue;
             _grid.RemoveItemAt(matchable.GridPosition);
             _pool.ReturnObject(matchable);
-            _grid.columnCoroutines[matchable.GridPosition.x] = _grid.StartCoroutine(_grid.CollapseRepopulateAndScanColumn(matchable.GridPosition.x));
+            _grid.ColumnCoroutines[matchable.GridPosition.x] = _grid.StartCoroutine(_grid.CollapseRepopulateAndScanColumn(matchable.GridPosition.x));
         }
     }
     public override string ToString()

@@ -47,7 +47,6 @@ public class AuthManager : MonoBehaviour
             }
         });
     }
-
     private void InitializeFirebase()
     {
         Debug.Log("Setting up Firebase Auth");
