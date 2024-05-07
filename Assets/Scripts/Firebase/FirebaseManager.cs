@@ -5,6 +5,8 @@ using Firebase.Auth;
 using Firebase.Database;
 using System.Threading.Tasks;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 public class FirebaseManager : MonoBehaviour
 {
@@ -76,37 +78,11 @@ public class FirebaseManager : MonoBehaviour
         StartCoroutine(UpdateUsername(_user.DisplayName));
     }
 
-
-    private IEnumerator UpdateUsernameAuth(string username)
-    {
-        UserProfile profile = new() { DisplayName = username };
-        Task ProfileTask = _user.UpdateUserProfileAsync(profile);
-        yield return new WaitUntil(predicate: () => ProfileTask.IsCompleted);
-
-        if (ProfileTask.Exception != null)
-        {
-            Debug.LogWarning(message: $"Failed to register task with {ProfileTask.Exception}");
-        }
-        else
-        {
-            //Auth username is now updated
-        }
-    }
-
     private IEnumerator UpdateUsername(string username)
     {
-      Task DBTask = _dbReference.Child("users").Child(_user.UserId).Child("username").SetValueAsync(username);
+        Task DBTask = _dbReference.Child("users").Child(_user.UserId).Child("username").SetValueAsync(username);
 
         yield return new WaitUntil(predicate: () => DBTask.IsCompleted);
-
-        if (DBTask.Exception != null)
-        {
-            Debug.LogWarning(message: $"Failed to register task with {DBTask.Exception}");
-        }
-        else
-        {
-            //Database username is now updated
-        }
     }
 
 
@@ -122,7 +98,6 @@ public class FirebaseManager : MonoBehaviour
         if (Convert.ToInt32(value) > Convert.ToInt32(snapshotUserID.Value))
         {
             Task DBTask = _dbReference.Child("users").Child(_user.UserId).Child(key).SetValueAsync(value);
-            Debug.Log(value);
             yield return new WaitUntil(() => DBTask.IsCompleted);
 
             Task<DataSnapshot> DBTaskUserIDLoad2 = _dbReference.Child("users").Child(_user.UserId).GetValueAsync();
@@ -229,13 +204,14 @@ public class FirebaseManager : MonoBehaviour
         else
         {
             DataSnapshot snapshot = DBTask2.Result;
+            List<DataSnapshot> sortedSnapshots = snapshot.Children.Cast<DataSnapshot>().OrderByDescending(childSnapshot => childSnapshot.Child("totalScore").Value).ToList();
 
             foreach (Transform child in MenuController.Instance.ScoreboardContent.transform)
             {
                 Destroy(child.gameObject);
             }
 
-            foreach (DataSnapshot childSnapshot in snapshot.Children)
+            foreach (DataSnapshot childSnapshot in sortedSnapshots)
             {
 
                 if (childSnapshot.HasChild("username"))

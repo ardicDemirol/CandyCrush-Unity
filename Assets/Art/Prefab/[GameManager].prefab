@@ -44,11 +44,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8774f9d2c4553f0459ff24a653f8bec6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _dontDestroyOnLoad: 1
+  dontDestroyOnLoad: 0
   LevelIndex: 1
   MinScore: 3500
   _maxAllowedMove: 5
   scoreText: {fileID: 0}
   targetScoreText: {fileID: 0}
   moveText: {fileID: 0}
-  dimensions: {x: 10, y: 10}
+  mainMenuButton: {fileID: 0}
+  dimensions: {x: 8, y: 10}

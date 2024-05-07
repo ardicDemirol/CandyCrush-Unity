@@ -43,8 +43,6 @@ namespace Core
             scoreText.text = _score.ToString("D7");
             moveText.text = _maxAllowedMove.ToString();
             targetScoreText.text = MinScore.ToString("D7");
-            mainMenuButton.onClick.AddListener(() => SceneController.Instance.LoadScene(1));
-
         }
         public void IncreaseScore(int value)
         {

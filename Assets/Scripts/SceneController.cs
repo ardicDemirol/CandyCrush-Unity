@@ -7,19 +7,23 @@ internal class SceneController : SingletonMonoBehaviour<SceneController>
 {
     #region Other Methods
 
+    private IEnumerator _coroutine;
     public void LoadScene(int sceneIndex, float waitTime)
     {
-        StartCoroutine(LoadSceneCoroutine(sceneIndex, waitTime));
+        _coroutine = LoadSceneCoroutine(sceneIndex, waitTime);
+        StartCoroutine(_coroutine);
     }
     public void LoadScene(int sceneIndex)
     {
-        StartCoroutine(LoadSceneCoroutine(sceneIndex, 0f));
+        _coroutine = LoadSceneCoroutine(sceneIndex, 0f);
+        StartCoroutine(_coroutine);
     }
 
     private IEnumerator LoadSceneCoroutine(int sceneIndex, float waitTime)
     {
         yield return new WaitForSeconds(waitTime);
         SceneManager.LoadSceneAsync(sceneIndex);
+        StopCoroutine(_coroutine);
     }
 
     #endregion
