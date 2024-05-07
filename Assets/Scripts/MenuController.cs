@@ -17,8 +17,6 @@ internal class MenuController : MonoBehaviour
     {
         if (Instance == null) Instance = this;
         else if (Instance != null) Destroy(this);
-
-
     }
 
     public void LevelSelectScreen()

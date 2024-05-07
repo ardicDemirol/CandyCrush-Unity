@@ -398,6 +398,14 @@ PrefabInstance:
       value: MatchableGrid
       objectReference: {fileID: 0}
     - target: {fileID: 7235145388085741399, guid: 3bb8de72581f6fd4a90af053c723794d, type: 3}
+      propertyPath: spacing.x
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7235145388085741399, guid: 3bb8de72581f6fd4a90af053c723794d, type: 3}
+      propertyPath: spacing.y
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7235145388085741399, guid: 3bb8de72581f6fd4a90af053c723794d, type: 3}
       propertyPath: _debugText
       value: 
       objectReference: {fileID: 0}
@@ -2510,7 +2518,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a4a4a122c9923a43bd3dbd7faf00c4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _dontDestroyOnLoad: 0
+  dontDestroyOnLoad: 0
   _prefab: {fileID: 336043748378844929, guid: 5ddad707e982c7c4fbba4309fdb5ad05, type: 3}
   _size: 300
   _expandingSize: 30
@@ -3213,7 +3221,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28cd7b1f38bf0fe4285f18e3701e91bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _dontDestroyOnLoad: 0
+  dontDestroyOnLoad: 0
   _audioClips:
   - {fileID: 8300000, guid: cec9950dd92b63449aa217f60293ab1b, type: 3}
   - {fileID: 8300000, guid: 1a1149583e526744882ea67aa8dd570b, type: 3}

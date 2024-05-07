@@ -1,6 +1,7 @@
 using TMPro;
 using UnityEngine;
 using Tools;
+using UnityEngine.UI;
 
 namespace Core
 {
@@ -12,7 +13,8 @@ namespace Core
         [SerializeField] private TextMeshProUGUI scoreText;
         [SerializeField] private TextMeshProUGUI targetScoreText;
         [SerializeField] private TextMeshProUGUI moveText;
-        [SerializeField] private Vector2Int dimensions = new Vector2Int(10,10);
+        [SerializeField] private Button mainMenuButton;
+        [SerializeField] private Vector2Int dimensions = new(10, 10);
         private int _score;
         private MatchableGrid _grid;
 
@@ -40,6 +42,8 @@ namespace Core
             _grid.PopulateGrid();
             scoreText.text = _score.ToString("D7");
             moveText.text = _maxAllowedMove.ToString();
+            targetScoreText.text = MinScore.ToString("D7");
+            mainMenuButton.onClick.AddListener(() => SceneController.Instance.LoadScene(1));
 
         }
         public void IncreaseScore(int value)
@@ -56,6 +60,7 @@ namespace Core
                 if (_score > MinScore)
                 {
                     Signals.OnLevelCompleted?.Invoke(LevelIndex+1);
+                    mainMenuButton.gameObject.transform.parent.gameObject.SetActive(true);
                 }
                 return false;
             }
@@ -66,6 +71,8 @@ namespace Core
             _maxAllowedMove--;
             moveText.text = _maxAllowedMove.ToString();
         }
+
+
     }
 }
 

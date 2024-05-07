@@ -26,7 +26,7 @@ namespace Core
         [SerializeField] private float colorExplodeDelays = 0.075f;
         [SerializeField] private TextMeshProUGUI debugText;
         [Header("Grid Config")]
-        [SerializeField] private Vector2 spacing;
+        [SerializeField] private Vector2 spacing = new(1.5f,1.5f);
         private Transform _transform;
         private MatchablePool _pool;
         private Movable _move;

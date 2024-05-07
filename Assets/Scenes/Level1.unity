@@ -426,6 +426,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &319232251 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7686901611848452752, guid: ae61b41a38cbc8247ab0675d619878c1, type: 3}
+  m_PrefabInstance: {fileID: 319232247}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &330071565
 GameObject:
   m_ObjectHideFlags: 0
@@ -652,6 +663,14 @@ PrefabInstance:
     - target: {fileID: 7235145388085741398, guid: 3bb8de72581f6fd4a90af053c723794d, type: 3}
       propertyPath: m_Name
       value: MatchableGrid
+      objectReference: {fileID: 0}
+    - target: {fileID: 7235145388085741399, guid: 3bb8de72581f6fd4a90af053c723794d, type: 3}
+      propertyPath: spacing.x
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7235145388085741399, guid: 3bb8de72581f6fd4a90af053c723794d, type: 3}
+      propertyPath: spacing.y
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 7235145388085741399, guid: 3bb8de72581f6fd4a90af053c723794d, type: 3}
       propertyPath: _debugText
@@ -1235,6 +1254,10 @@ PrefabInstance:
       propertyPath: scoreText
       value: 
       objectReference: {fileID: 319232249}
+    - target: {fileID: 2289713592523740856, guid: 9c347d59e0af47342a4ce31f9bca0f51, type: 3}
+      propertyPath: mainMenuButton
+      value: 
+      objectReference: {fileID: 319232251}
     - target: {fileID: 2289713592523740856, guid: 9c347d59e0af47342a4ce31f9bca0f51, type: 3}
       propertyPath: targetScoreText
       value: 
@@ -1961,7 +1984,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a4a4a122c9923a43bd3dbd7faf00c4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _dontDestroyOnLoad: 0
+  dontDestroyOnLoad: 0
   _prefab: {fileID: 336043748378844929, guid: 5ddad707e982c7c4fbba4309fdb5ad05, type: 3}
   _size: 300
   _expandingSize: 30
@@ -2401,7 +2424,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 28cd7b1f38bf0fe4285f18e3701e91bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _dontDestroyOnLoad: 0
+  dontDestroyOnLoad: 0
   _audioClips:
   - {fileID: 8300000, guid: cec9950dd92b63449aa217f60293ab1b, type: 3}
   - {fileID: 8300000, guid: 1a1149583e526744882ea67aa8dd570b, type: 3}

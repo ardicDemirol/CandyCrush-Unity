@@ -5,7 +5,6 @@ using UnityEngine.SceneManagement;
 
 internal class SceneController : SingletonMonoBehaviour<SceneController>
 {
-    
     #region Other Methods
 
     public void LoadScene(int sceneIndex, float waitTime)
@@ -23,10 +22,6 @@ internal class SceneController : SingletonMonoBehaviour<SceneController>
         SceneManager.LoadSceneAsync(sceneIndex);
     }
 
-
     #endregion
-
-
-
 
 }

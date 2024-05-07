@@ -4,16 +4,16 @@ public class Match
 {
     private List<Matchable> _matchableList;
     public int Count => _matchableList.Count;
-    public bool Collectable => Count >= _minMatch;
+    public bool Collectable => Count >= MIN_MATCH;
 
     public bool OriginExclusive { get => _originExclusive; set => _originExclusive = value; }
     public List<Matchable> MatchableList { get => _matchableList; set => _matchableList = value; }
 
-    private const int _minMatch = 3;
     private bool _originExclusive;
     private MatchableGrid _grid;
     private MatchablePool _pool;
     private Matchable _originMatchable;
+    private const int MIN_MATCH = 3;
 
     public Match(Matchable matchable)
     {
@@ -49,18 +49,13 @@ public class Match
         {
             int x = matchable.GridPosition.x;
             int y = matchable.GridPosition.y;
-            if (x >= maxX)
-                maxX = x;
-            if (x <= minX)
-                minX = x;
-            if (y >= maxY)
-                maxY = y;
-            if (y <= minY)
-                minY = y;
+            if (x >= maxX) maxX = x;
+            if (x <= minX) minX = x;
+            if (y >= maxY) maxY = y;
+            if (y <= minY) minY = y;
         }
         if (minX != maxX)
-            if (minY != maxY)
-                isMixedOrientation = true;
+            if (minY != maxY) isMixedOrientation = true;
 
         if (isMixedOrientation)
         {
@@ -133,7 +128,6 @@ public class Match
         {
             Matchable matchable = _matchableList[i];
             if (matchable.IsMoving) continue;
-            matchable.CollectScorePoint();
             if (isTransformed && matchable == _originMatchable) continue;
             _grid.RemoveItemAt(matchable.GridPosition);
             _pool.ReturnObject(matchable);
